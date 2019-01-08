@@ -10,7 +10,15 @@
 # on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
 # express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.2)
+
+include(cmake/HunterGate.cmake)
+
+HunterGate(
+    URL "https://github.com/ruslo/hunter/archive/v0.23.83.tar.gz"
+    SHA1 "12dec078717539eb7b03e6d2a17797cba9be9ba9"
+)
+
 project (aws-c-event-stream C)
 
 if (UNIX AND NOT APPLE)
@@ -19,6 +27,8 @@ elseif(NOT DEFINED CMAKE_INSTALL_LIBDIR)
     set(CMAKE_INSTALL_LIBDIR "lib")
 endif()
 
+hunter_add_package(aws-c-common)
+hunter_add_package(aws-checksums)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake")
 
 include(AwsCFlags)
@@ -71,8 +81,8 @@ target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES VERSION 1.0.0)
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES SOVERSION 0unstable)
 
-find_package(aws-c-common REQUIRED)
-find_package(aws-checksums REQUIRED)
+find_package(aws-c-common CONFIG REQUIRED)
+find_package(aws-checksums CONFIG REQUIRED)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC AWS::aws-c-common AWS::aws-checksums)
 
@@ -84,16 +94,14 @@ install(FILES ${AWS_EVENT_STREAM_HEADERS}
 
 install(EXPORT "${CMAKE_PROJECT_NAME}-targets"
     DESTINATION "${LIBRARY_DIRECTORY}/${CMAKE_PROJECT_NAME}/cmake/"
-    NAMESPACE AWS::
-    COMPONENT Development)
+    NAMESPACE AWS::)
 
 configure_file("cmake/${CMAKE_PROJECT_NAME}-config.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}-config.cmake"
     @ONLY)
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}-config.cmake"
-    DESTINATION "${LIBRARY_DIRECTORY}/${CMAKE_PROJECT_NAME}/cmake/"
-    COMPONENT Development)
+    DESTINATION "${LIBRARY_DIRECTORY}/${CMAKE_PROJECT_NAME}/cmake/")
 
 
 include(CTest)
