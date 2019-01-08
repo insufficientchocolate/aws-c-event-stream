@@ -23,13 +23,15 @@ project (aws-c-event-stream C)
 
 if (UNIX AND NOT APPLE)
     include(GNUInstallDirs)
+    set(AWS_MODULE_PATH "${CMAKE_INSTALL_LIBDIR}/cmake")
 elseif(NOT DEFINED CMAKE_INSTALL_LIBDIR)
     set(CMAKE_INSTALL_LIBDIR "lib")
+    set(AWS_MODULE_PATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake")
 endif()
 
 hunter_add_package(aws-c-common)
 hunter_add_package(aws-checksums)
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${AWS_MODULE_PATH}")
 
 include(AwsCFlags)
 include(AwsSharedLibSetup)
