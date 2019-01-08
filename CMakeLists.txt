@@ -31,7 +31,7 @@ endif()
 
 hunter_add_package(aws-c-common)
 hunter_add_package(aws-checksums)
-list(APPEND CMAKE_MODULE_PATH "${AWS_MODULE_PATH}")
+find_package(aws-c-common CONFIG REQUIRED)
 
 include(AwsCFlags)
 include(AwsSharedLibSetup)
