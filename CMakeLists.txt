@@ -23,10 +23,8 @@ project (aws-c-event-stream C)
 
 if (UNIX AND NOT APPLE)
     include(GNUInstallDirs)
-    set(AWS_MODULE_PATH "${CMAKE_INSTALL_LIBDIR}/cmake")
 elseif(NOT DEFINED CMAKE_INSTALL_LIBDIR)
     set(CMAKE_INSTALL_LIBDIR "lib")
-    set(AWS_MODULE_PATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake")
 endif()
 
 hunter_add_package(aws-c-common)
